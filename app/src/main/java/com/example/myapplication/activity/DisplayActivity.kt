@@ -13,10 +13,13 @@ class DisplayActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_display)
-        var article:Articles?=intent?.getParcelableExtra("object")
+        var article: Articles? = intent?.getParcelableExtra("object")
         Glide.with(this).load(article?.urlToImage).into(news_img)
-        tv_title_text?.text=article?.title
-        tv_desc.text=article?.description
-        tv_url.text=article?.urlToImage
+        tv_title_text?.text = article?.title
+        tv_date.text = article?.publishedAt
+        tv_desc?.text = article?.description
+        tv_desc.text = article?.content
+        tv_url.text = "For more information:\n" + article?.url
+        tv_author.text = article?.author
     }
 }

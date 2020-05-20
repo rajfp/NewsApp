@@ -11,26 +11,30 @@ import retrofit2.Call
 import retrofit2.Response
 
 class NewsRepository(context: Context) {
-    var news:MutableLiveData<NewsResponseModel>
-    var retroInstance:NetworkInterface?=null
+    var news: MutableLiveData<NewsResponseModel>
+    var retroInstance: NetworkInterface? = null
 
     init {
-        news= MutableLiveData()
-        retroInstance=NetworkManager.getRetrofitInstance(context).create(NetworkInterface::class.java)
+        news = MutableLiveData()
+        retroInstance =
+            NetworkManager.getRetrofitInstance(context).create(NetworkInterface::class.java)
     }
 
-        fun getLatestNews(country:String, apiKey:String):MutableLiveData<NewsResponseModel>{
-            var response=retroInstance?.getLatestNews(country,apiKey)
-            response?.enqueue(object:retrofit2.Callback<NewsResponseModel>{
-                override fun onFailure(call: Call<NewsResponseModel>, t: Throwable) {
-                    Log.d("MainActivity",t.message);
-                }
+    fun getLatestNews(country: String, apiKey: String): MutableLiveData<NewsResponseModel> {
+        var response = retroInstance?.getLatestNews(country, apiKey)
+        response?.enqueue(object : retrofit2.Callback<NewsResponseModel> {
+            override fun onFailure(call: Call<NewsResponseModel>, t: Throwable) {
+                Log.d("MainActivity", t.message);
+            }
 
-                override fun onResponse(call: Call<NewsResponseModel>, response: Response<NewsResponseModel>) {
-                    news?.value=response.body()
-                }
+            override fun onResponse(
+                call: Call<NewsResponseModel>,
+                response: Response<NewsResponseModel>
+            ) {
+                news?.value = response.body()
+            }
 
-            })
-            return news
-        }
+        })
+        return news
+    }
 }

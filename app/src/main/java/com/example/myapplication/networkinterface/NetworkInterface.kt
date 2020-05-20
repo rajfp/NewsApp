@@ -7,6 +7,6 @@ import retrofit2.http.Query
 
 interface NetworkInterface {
     @GET("v2/top-headlines")
-    fun getLatestNews(@Query("country") country:String,@Query("apiKey") apiKey:String):retrofit2.Call<NewsResponseModel>
+    fun getLatestNews(@Query("country") country: String, @Query("apiKey") apiKey: String): retrofit2.Call<NewsResponseModel>
 
 }

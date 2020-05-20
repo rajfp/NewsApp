@@ -12,9 +12,19 @@ import com.example.myapplication.listener.ClickListener
 import com.example.myapplication.model.Articles
 import kotlinx.android.synthetic.main.item_list_layout.view.*
 
-class NewsAdapter(private val context: Context,val list: List<Articles>,val clickListener: ClickListener) : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
+class NewsAdapter(
+    private val context: Context,
+    val list: List<Articles>,
+    val clickListener: ClickListener
+) : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsViewHolder {
-        return NewsViewHolder(LayoutInflater.from(context).inflate(R.layout.item_list_layout,parent,false))
+        return NewsViewHolder(
+            LayoutInflater.from(context).inflate(
+                R.layout.item_list_layout,
+                parent,
+                false
+            )
+        )
     }
 
     override fun getItemCount(): Int {
@@ -22,23 +32,23 @@ class NewsAdapter(private val context: Context,val list: List<Articles>,val clic
     }
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
-        val news=list.get(position)
-        holder.bind(news,clickListener)
+        val news = list.get(position)
+        holder.bind(news, clickListener)
     }
 
-      inner class NewsViewHolder(val view: View):RecyclerView.ViewHolder(view),View.OnClickListener{
-          fun bind(articles: Articles,clickListener:ClickListener)
-          {
-              view.tv_title.text = articles.title
-              view.tv_published.text=articles.publishedAt
-              Glide.with(context).load(list.get(adapterPosition).urlToImage).into(view.img)
-              itemView.setOnClickListener {
-                  clickListener.sendData(articles)
-              }
-          }
+    inner class NewsViewHolder(val view: View) : RecyclerView.ViewHolder(view),
+        View.OnClickListener {
+        fun bind(articles: Articles, clickListener: ClickListener) {
+            view.tv_title.text = articles.title
+            view.tv_published.text = articles.publishedAt
+            Glide.with(context).load(list.get(adapterPosition).urlToImage).into(view.img)
+            itemView.setOnClickListener {
+                clickListener.sendData(articles)
+            }
+        }
 
         override fun onClick(v: View?) {
-           clickListener.sendData(list[adapterPosition])
+            clickListener.sendData(list[adapterPosition])
         }
 
 

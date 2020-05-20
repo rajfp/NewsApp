@@ -5,8 +5,13 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 
-data class NewsResponseModel(val status:String,val totalResults :Int, val articles:List<Articles>)
-data class Source(val id:String?,val name:String?):Parcelable {
+data class NewsResponseModel(
+    val status: String,
+    val totalResults: Int,
+    val articles: List<Articles>
+)
+
+data class Source(val id: String?, val name: String?) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString()
@@ -33,10 +38,12 @@ data class Source(val id:String?,val name:String?):Parcelable {
     }
 }
 
-data class Articles(val source: Source, val author:String?, val title:String?, val description:String?,
-                    @SerializedName("urlToImage")val urlToImage:String?,
-                    @SerializedName("publishedAt")val publishedAt:String?, val content:String?,
-                    @SerializedName("url")val url:String?):Parcelable {
+data class Articles(
+    val source: Source, val author: String?, val title: String?, val description: String?,
+    @SerializedName("urlToImage") val urlToImage: String?,
+    @SerializedName("publishedAt") val publishedAt: String?, val content: String?,
+    @SerializedName("url") val url: String?
+) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readParcelable(Source::class.java.classLoader)!!,
         parcel.readString(),
@@ -57,6 +64,7 @@ data class Articles(val source: Source, val author:String?, val title:String?, v
         parcel.writeString(urlToImage)
         parcel.writeString(publishedAt)
         parcel.writeString(content)
+        parcel.writeString(url)
     }
 
     override fun describeContents(): Int {
