@@ -24,7 +24,6 @@ class NewsRepository(context: Context) {
         var response = retroInstance?.getLatestNews(country, apiKey)
         response?.enqueue(object : retrofit2.Callback<NewsResponseModel> {
             override fun onFailure(call: Call<NewsResponseModel>, t: Throwable) {
-                Log.d("MainActivity", t.message);
             }
 
             override fun onResponse(

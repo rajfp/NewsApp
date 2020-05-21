@@ -17,16 +17,10 @@ import kotlinx.android.synthetic.main.item_list_layout.view.*
 class NewsAdapter(
     private val context: Context,
     val list: List<Articles>,
-    val clickListener: ClickListener
-) : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
+    val clickListener: ClickListener) : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsViewHolder {
         return NewsViewHolder(
-            LayoutInflater.from(context).inflate(
-                R.layout.item_list_layout,
-                parent,
-                false
-            )
-        )
+            LayoutInflater.from(context).inflate(R.layout.item_list_layout, parent, false))
     }
 
     override fun getItemCount(): Int {
@@ -38,13 +32,16 @@ class NewsAdapter(
         holder.bind(news, clickListener)
     }
 
-    inner class NewsViewHolder(val view: View) : RecyclerView.ViewHolder(view),
+    inner class NewsViewHolder(private val view: View) : RecyclerView.ViewHolder(view),
         View.OnClickListener {
         fun bind(articles: Articles, clickListener: ClickListener) {
             view.tv_title.text = articles.title
             view.tv_published.text = articles.publishedAt
-            Glide.with(context).load(list.get(adapterPosition).urlToImage).apply(RequestOptions().diskCacheStrategy(
-                DiskCacheStrategy.AUTOMATIC)).into(view.img)
+            Glide.with(context).load(list.get(adapterPosition).urlToImage).apply(
+                RequestOptions().diskCacheStrategy(
+                    DiskCacheStrategy.AUTOMATIC
+                )
+            ).into(view.img)
             itemView.setOnClickListener {
                 clickListener.sendData(articles)
             }

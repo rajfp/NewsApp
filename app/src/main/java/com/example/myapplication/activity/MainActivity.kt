@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.R
 import com.example.myapplication.adapter.NewsAdapter
+import com.example.myapplication.constants.Constants
 import com.example.myapplication.listener.ClickListener
 import com.example.myapplication.model.Articles
 import com.example.myapplication.model.NewsResponseModel
@@ -28,7 +29,7 @@ class MainActivity : AppCompatActivity(), ClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         newViewModel = NewsViewModel(this)
-        newViewModel.fetchNews("us", "250dce9c063b4cef98bcb98fae170308")
+        newViewModel.fetchNews(Constants.COUNTRY, Constants.API_KEY)
             ?.observe(this, Observer { t ->
                 t?.articles?.let { setRecyclerView(it) }
             })
@@ -43,7 +44,7 @@ class MainActivity : AppCompatActivity(), ClickListener {
 
     override fun sendData(articles: Articles) {
         var intent = Intent(this, DisplayActivity::class.java)
-        intent.putExtra("object", articles)
+        intent.putExtra(Constants.OBJECT, articles)
         startActivity(intent)
     }
 

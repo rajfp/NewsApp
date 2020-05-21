@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">My Application</string>
     <string name="news_app">News</string>
+    <string name="for_more">For more information:\n</string>
+    <string name="cache">Cache-Control</string>
 </resources>

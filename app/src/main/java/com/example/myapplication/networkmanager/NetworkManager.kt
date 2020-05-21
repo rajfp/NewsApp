@@ -3,6 +3,7 @@ package com.example.myapplication.networkmanager
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
+import com.example.myapplication.constants.Constants
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
 import okhttp3.Cache
@@ -26,15 +27,12 @@ object NetworkManager {
             .cache(myCache)
             .addNetworkInterceptor() { chain ->
                 val originalResponse = chain.proceed(chain.request())
-                val cacheControl = originalResponse.header("Cache-Control")
-                if (cacheControl == null || cacheControl!!.contains("no-store") || cacheControl!!.contains(
-                        "cache"
-                    ) ||
-                    cacheControl!!.contains("must-revalidate") || cacheControl!!.contains("max-age=0")
-                ) {
+                val cacheControl = originalResponse.header(Constants.CACHE_CONTROL)
+                if (cacheControl == null || cacheControl!!.contains(Constants.NO_STORE) || cacheControl!!.contains(Constants.CACHE) ||
+                    cacheControl!!.contains(Constants.MUST_REVALIDATE) || cacheControl!!.contains(Constants.MAX_AGE)) {
                     originalResponse.newBuilder()
-                        .removeHeader("Pragma")
-                        .header("Cache-Control", "public, max-age=" + 5000)
+                        .removeHeader(Constants.PRAGMA)
+                        .header(Constants.CACHE_CONTROL, Constants.PUBLIC + 5000)
                         .build()
                 } else {
                     originalResponse
@@ -43,7 +41,7 @@ object NetworkManager {
                 var request = chain.request()
                 if (!(this!!.hasNetwork(context)!!)) {
                     request = request.newBuilder()
-                        .removeHeader("Pragma")
+                        .removeHeader(Constants.PRAGMA)
                         .cacheControl(CacheControl.Builder().maxStale(7, TimeUnit.DAYS).build())
                         .build()
                 }
@@ -55,7 +53,7 @@ object NetworkManager {
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .create()
         return Retrofit.Builder()
-            .baseUrl("https://newsapi.org/")
+            .baseUrl(Constants.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
