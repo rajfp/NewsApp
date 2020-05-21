@@ -29,8 +29,8 @@ class MainActivity : AppCompatActivity(), ClickListener {
         setContentView(R.layout.activity_main)
         newViewModel = NewsViewModel(this)
         newViewModel.fetchNews("us", "250dce9c063b4cef98bcb98fae170308")
-            .observe(this, Observer { t ->
-                setRecyclerView(t.articles)
+            ?.observe(this, Observer { t ->
+                t?.articles?.let { setRecyclerView(it) }
             })
     }
 

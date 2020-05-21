@@ -11,7 +11,7 @@ import retrofit2.Call
 import retrofit2.Response
 
 class NewsRepository(context: Context) {
-    var news: MutableLiveData<NewsResponseModel>
+    var news: MutableLiveData<NewsResponseModel>?
     var retroInstance: NetworkInterface? = null
 
     init {
@@ -20,7 +20,7 @@ class NewsRepository(context: Context) {
             NetworkManager.getRetrofitInstance(context).create(NetworkInterface::class.java)
     }
 
-    fun getLatestNews(country: String, apiKey: String): MutableLiveData<NewsResponseModel> {
+    fun getLatestNews(country: String, apiKey: String): MutableLiveData<NewsResponseModel>? {
         var response = retroInstance?.getLatestNews(country, apiKey)
         response?.enqueue(object : retrofit2.Callback<NewsResponseModel> {
             override fun onFailure(call: Call<NewsResponseModel>, t: Throwable) {

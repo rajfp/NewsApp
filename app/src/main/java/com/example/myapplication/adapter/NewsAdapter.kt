@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.example.myapplication.R
 import com.example.myapplication.listener.ClickListener
 import com.example.myapplication.model.Articles
@@ -41,7 +43,8 @@ class NewsAdapter(
         fun bind(articles: Articles, clickListener: ClickListener) {
             view.tv_title.text = articles.title
             view.tv_published.text = articles.publishedAt
-            Glide.with(context).load(list.get(adapterPosition).urlToImage).into(view.img)
+            Glide.with(context).load(list.get(adapterPosition).urlToImage).apply(RequestOptions().diskCacheStrategy(
+                DiskCacheStrategy.RESOURCE)).into(view.img)
             itemView.setOnClickListener {
                 clickListener.sendData(articles)
             }
