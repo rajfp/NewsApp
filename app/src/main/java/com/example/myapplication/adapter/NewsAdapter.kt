@@ -44,7 +44,7 @@ class NewsAdapter(
             view.tv_title.text = articles.title
             view.tv_published.text = articles.publishedAt
             Glide.with(context).load(list.get(adapterPosition).urlToImage).apply(RequestOptions().diskCacheStrategy(
-                DiskCacheStrategy.RESOURCE)).into(view.img)
+                DiskCacheStrategy.AUTOMATIC)).into(view.img)
             itemView.setOnClickListener {
                 clickListener.sendData(articles)
             }
