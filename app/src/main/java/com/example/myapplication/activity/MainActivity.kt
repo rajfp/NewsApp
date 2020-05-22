@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +13,7 @@ import com.example.myapplication.adapter.NewsAdapter
 import com.example.myapplication.constants.Constants
 import com.example.myapplication.listener.ClickListener
 import com.example.myapplication.model.Articles
+import com.example.myapplication.model.CallResponse
 import com.example.myapplication.model.NewsResponseModel
 import com.example.myapplication.networkinterface.NetworkInterface
 import com.example.myapplication.networkmanager.NetworkManager
@@ -31,7 +33,14 @@ class MainActivity : AppCompatActivity(), ClickListener {
         newViewModel = NewsViewModel(this)
         newViewModel.fetchNews(Constants.COUNTRY, Constants.API_KEY)
             ?.observe(this, Observer { t ->
-                t?.articles?.let { setRecyclerView(it) }
+               when(t.status){
+                   CallResponse.Status.SUCCESS->{
+                       t?.data?.articles?.let { setRecyclerView(it) }
+                   }
+                   CallResponse.Status.ERROR->{
+                       Toast.makeText(this,t.message,Toast.LENGTH_LONG).show()
+                   }
+               }
             })
     }
 
