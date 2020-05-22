@@ -37,7 +37,8 @@ class NewsAdapter(
         fun bind(articles: Articles, clickListener: ClickListener) {
             view.tv_title.text = articles.title
             view.tv_published.text = articles.publishedAt
-            Glide.with(context).load(list.get(adapterPosition).urlToImage).apply(
+            Glide.with(context).load(list.get(adapterPosition).urlToImage).placeholder(R.drawable.credit)
+                .error(R.drawable.credit).apply(
                 RequestOptions().diskCacheStrategy(
                     DiskCacheStrategy.AUTOMATIC
                 )
