@@ -6,8 +6,10 @@ import com.example.myapplication.model.CallResponse
 import com.example.myapplication.model.NewsResponseModel
 import com.example.myapplication.networkinterface.NetworkInterface
 import com.example.myapplication.networkmanager.NetworkManager
-import retrofit2.Call
-import retrofit2.Response
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.schedulers.Schedulers
 
 class NewsRepository(context: Context) {
     var news: MutableLiveData<CallResponse<NewsResponseModel>>? = MutableLiveData()
@@ -17,19 +19,19 @@ class NewsRepository(context: Context) {
         retroInstance = NetworkManager.getRetrofitInstance(context).create(NetworkInterface::class.java)
     }
 
-    fun getLatestNews(country: String, apiKey: String): MutableLiveData<CallResponse<NewsResponseModel>>? {
-        var response = retroInstance?.getLatestNews(country, apiKey)
-        response?.enqueue(object : retrofit2.Callback<NewsResponseModel> {
-            override fun onFailure(call: Call<NewsResponseModel>, t: Throwable) {
-                news?.value=CallResponse.error(t)
-            }
+    fun getLatestNews(compositeDisposable: CompositeDisposable, country: String, apiKey: String): MutableLiveData<CallResponse<NewsResponseModel>>? {
+        retroInstance?.getLatestNews(country,apiKey)
+            ?.subscribeOn(Schedulers.io())
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribeWith(object : DisposableSingleObserver<NewsResponseModel>() {
+                override fun onSuccess(t: NewsResponseModel) {
+                    news?.value= CallResponse.success(t)
+                }
+                override fun onError(e: Throwable) {
+                    news?.value= CallResponse.error(e)
+                }
 
-            override fun onResponse(call: Call<NewsResponseModel>, response: Response<NewsResponseModel>
-            ) {
-                news?.value =CallResponse.success(response.body())
-            }
-
-        })
+            })?.let { compositeDisposable.add(it) }
         return news
     }
 }
